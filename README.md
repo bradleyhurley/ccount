@@ -32,14 +32,18 @@ Options:
   --help            Show this message and exit.
  ``` 
 ## Examples
-```> cat sample_file | ./ccount
-4```
-```> python ccount --input sample_file
-4```
 
+`> cat sample_file | ./ccount`
+
+4
+
+`> python ccount --input sample_file`
+
+4
 ## Other
 You could always use awk to get the same result, but I wanted to work on a simple project and use Click for command line arguments.
 
-```> awk '{print NF}' sample_file
-4```
+`> awk '{print NF}' sample_file`
+
+4
 
