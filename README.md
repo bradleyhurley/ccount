@@ -31,6 +31,7 @@ Options:
   --delimiter TEXT  The file delimiter.  Default='|'
   --help            Show this message and exit.
  ``` 
+
 ## Examples
 
 `> cat sample_file | ./ccount`
