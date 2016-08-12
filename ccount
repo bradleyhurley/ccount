@@ -1,0 +1,60 @@
+#!/usr/bin/env python
+
+import bz2
+import gzip
+import sys
+
+import click
+import magic
+
+
+@click.command()
+@click.option('--input', default='-', type=click.File('r'), help='The file to read as input or \'-\'for standard in.')
+@click.option('--delimiter', default='|', help='The file delimiter')
+def main(input, delimiter):
+
+    if input.name == '<stdin>':
+        line = sys.stdin.readline()
+    else:
+        magic_file_type = get_file_type(input.name)
+        magic_file_type = magic_file_type.replace('/', '_').replace('-', '_')
+        try:
+            line = globals()[magic_file_type](input.name)
+        except KeyError as e:
+            print "Unsupported MIME Type {}".format(e)
+            sys.exit(1)
+
+    number_of_columns = count_columns(line, delimiter)
+    display_output(number_of_columns)
+
+
+def get_file_type(input_file):
+    with magic.Magic(flags=magic.MAGIC_MIME_TYPE) as m:
+        return m.id_filename(input_file)
+
+
+def application_x_bzip2(file_name):
+    with bz2.BZ2File(file_name, 'r') as f:
+        return f.readline().strip()
+
+
+def application_x_gzip(file_name):
+    with gzip.open(file_name, 'rb') as f:
+        return f.readline().strip()
+
+
+def text_plain(file_name):
+    with open(file_name, 'r') as f:
+        return f.readline().strip()
+
+
+def count_columns(line, delimiter):
+    columns = line.count(delimiter) + 1
+    return columns
+
+
+def display_output(number_of_columns):
+    sys.stdout.write(str(number_of_columns) + '\n')
+
+if __name__ == "__main__":
+    main()
