@@ -44,7 +44,7 @@ Options:
 ## Other
 You could always use awk to get the same result, but I wanted to work on a simple project and use Click for command line arguments.
 
-`> awk '{print NF}' sample_file`
+`> awk -F '|' '{print NF}' sample_file`
 
 4
 
